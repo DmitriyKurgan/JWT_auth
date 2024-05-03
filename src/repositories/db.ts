@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import {BLogType, PostType, UserDBType, UserType} from "../utils/types";
 dotenv.config()
 
-const mongoURI = process.env.MONGO_URL || "mongodb+srv://dimakurgan123789:annogolik123789@blogsplatform.mxifx0s.mongodb.net/?retryWrites=true&w=majority&appName=BlogsPlatform"
+const mongoURI = process.env.MONGO_URL || "mongodb+srv://dimakurgan123789:pass123242343@blogsplatform.mxifx0s.mongodb.net/?retryWrites=true&w=majority&appName=BlogsPlatform"
 if (!mongoURI){
     throw new Error('Database url is not defined!')
 }
@@ -14,7 +14,7 @@ export const usersCollection =  client.db('learning').collection<UserDBType>('us
 export async function runDB (){
     try {
         await client.connect();
-        await client.db('blogs').command({ping:1});
+        await client.db('learning').command({ping:1});
         console.log('Successfully connected to server');
 
     } catch (error) {

@@ -8,7 +8,7 @@ export const authController = Router({});
 authController.post('/login', validateAuthRequests, validateErrorsMiddleware, async (req: Request, res: Response) => {
      const checkResult = await usersService.checkCredentials(req.body.loginOrEmail, req.body.password)
       if (checkResult){
-        res.sendStatus(CodeResponsesEnum.Not_content_204)
+        res.sendStatus(CodeResponsesEnum.OK_200)
           return;
       }
       res.sendStatus(401)

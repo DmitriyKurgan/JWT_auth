@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 import {BLogType, PostType, UserDBType, UserType} from "../utils/types";
 dotenv.config()
 
-const mongoURI = process.env.MONGO_URL || "mongodb+srv://dimakurgan123789:pass123242343@blogsplatform.mxifx0s.mongodb.net/?retryWrites=true&w=majority&appName=BlogsPlatform"
+const mongoURI = process.env.MONGO_URL || "mongodb+srv://dimakurgan123789:annogolik123789@blogsplatform.mxifx0s.mongodb.net/?retryWrites=true&w=majority&appName=BlogsPlatform"
 if (!mongoURI){
     throw new Error('Database url is not defined!')
 }

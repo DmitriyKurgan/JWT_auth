@@ -14,7 +14,7 @@ export const usersCollection =  client.db('learning').collection<UserDBType>('us
 export async function runDB (){
     try {
         await client.connect();
-        await client.db('learning').command({ping:1});
+        await client.db('blogs').command({ping:1});
         console.log('Successfully connected to server');
 
     } catch (error) {

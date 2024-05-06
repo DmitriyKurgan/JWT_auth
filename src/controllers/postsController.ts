@@ -47,13 +47,15 @@ postsController.get('/:id/comments', async (req:Request, res:Response)=>{
         sortBy: req.query.sortBy,
         sortDirection: req.query.sortDirection,
     })
+    debugger
     const postID:string = req.params.id;
     const postByID:OutputPostType|null = await postsQueryRepository.findPostByID(postID);
     if (!postID || !postByID){
         return res.sendStatus(CodeResponsesEnum.Not_found_404)
     }
+    debugger
     const commentsForParticularPost = await commentsQueryRepository.findAllCommentsByPostID(postID, queryValues)
-    if (!commentsForParticularPost) {
+    if (!commentsForParticularPost || !commentsForParticularPost.items.length) {
         return res.status(CodeResponsesEnum.OK_200).send([]);
     }
     res.status(CodeResponsesEnum.OK_200).send(commentsForParticularPost);

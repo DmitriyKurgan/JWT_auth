@@ -1,4 +1,4 @@
-import {OutputUserType, UserDBType, UserType} from "../../utils/types";
+import {OutputUserType, UserDBType} from "../../utils/types";
 import {ObjectId, WithId} from "mongodb";
 import {getUsersFromDB} from "../../utils/utils";
 import {usersCollection} from "../db";

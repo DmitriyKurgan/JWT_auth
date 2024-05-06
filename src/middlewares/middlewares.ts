@@ -189,6 +189,7 @@ export const validationBlogsFindByParamId = param("id").custom(
 
 export const validationCommentsFindByParamId = param("id").custom(
     async (value) => {
+        debugger
         const result = await commentsQueryRepository.findCommentByID(value);
         if (!result) {
             throw new Error("ID not found");
@@ -201,7 +202,7 @@ export const validateUserFindByParamId = param("id").custom(
     async (value) => {
         const result = await usersQueryRepository.findUserByID(value);
         if (!result) {
-            throw new Error("ID not found");
+            return CodeResponsesEnum.Not_found_404
         }
         return true;
     }
@@ -234,6 +235,7 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
 }
 
 export const checkIsForbidden = async (req:Request, res:Response, next:NextFunction)=>{
+    debugger
     const commentID = req.params.id
     const currentComment = await  commentsQueryRepository.findCommentByID(commentID)
     if (req.userId !== currentComment?.commentatorInfo.userId){

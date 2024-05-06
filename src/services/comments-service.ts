@@ -1,12 +1,5 @@
-import {CommentType, OutputCommentType, OutputPostType, OutputUserType, PostType, UserDBType} from "../utils/types";
-import {usersRepository} from "../repositories/users-repository";
-import bcrypt from 'bcrypt'
-import {InsertOneResult, ObjectId, WithId} from "mongodb";
-import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
-import {PostMapper, postsRepository} from "../repositories/posts-repository";
+import {CommentType, OutputCommentType} from "../utils/types";
 import {commentsRepository} from "../repositories/comments-repository";
-import {postsCollection} from "../repositories/db";
-import {body} from "express-validator";
 
 export const comments = [] as OutputCommentType[]
 

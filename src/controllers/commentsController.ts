@@ -16,7 +16,6 @@ commentsController.get('/:id',
     validationCommentsFindByParamId,
     validateErrorsMiddleware,
     async (req: Request, res: Response) => {
-    debugger
     const commentID = req.params.id;
     const commentByID: OutputCommentType | null = await commentsQueryRepository.findCommentByID(commentID);
     if (!commentID || !commentByID) {
@@ -33,7 +32,6 @@ commentsController.put('/:id',
     validateCommentsRequests,
     validateErrorsMiddleware,
     async (req: Request, res: Response) => {
-    debugger
     const commentID = req.params.id;
     const isUpdated: boolean = await commentsService.updateComment(commentID, req.body);
     if (!isUpdated) {

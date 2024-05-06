@@ -14,9 +14,8 @@ export const commentsRepository = {
        debugger
         const result: UpdateResult<CommentType> = await commentsCollection.updateOne({_id: new ObjectId(commentID)},
             {$set: {
+                    ...body,
                     content: body.content,
-                    commentatorInfo: {...body.commentatorInfo},
-                    createdAt:body.createdAt,
                     postId:body.postId
                 }});
        return result.matchedCount === 1

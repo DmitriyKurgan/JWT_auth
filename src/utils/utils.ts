@@ -10,6 +10,7 @@ import {CommentMapper} from "../repositories/query-repositories/comments-query-r
 export enum CodeResponsesEnum {
     Incorrect_values_400 = 400,
     Unauthorized_401= 401,
+    Forbidden_403= 403,
     Not_found_404 = 404,
     Not_content_204 = 204,
     Created_201 = 201,

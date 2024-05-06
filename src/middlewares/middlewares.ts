@@ -158,7 +158,24 @@ export const validateBlogIdForPostsRequests = [
         .withMessage("Blog ID is required")
         .isString()
         .withMessage("Type of Blog ID must be string"),
-]
+];
+
+export const validateCommentsRequests = [
+    body("content")
+        .exists()
+        .withMessage("Content is required")
+        .isString()
+        .withMessage("Type of content must be a string")
+        .trim()
+        .withMessage("Content must be in correct format")
+        .isLength({
+            min: 20,
+            max: 300,
+        })
+        .withMessage(
+            "cContent length must be more than 20 and less than or equal to 300 symbols"
+        ),
+   ];
 
 export const validationBlogsFindByParamId = param("id").custom(
     async (value) => {
@@ -170,10 +187,8 @@ export const validationBlogsFindByParamId = param("id").custom(
     }
 );
 
-
 export const validationCommentsFindByParamId = param("id").custom(
     async (value) => {
-        // debugger
         const result = await commentsQueryRepository.findCommentByID(value);
         if (!result) {
             throw new Error("ID not found");
@@ -182,7 +197,7 @@ export const validationCommentsFindByParamId = param("id").custom(
     }
 );
 
-export const validateDeleteUserByParamId = param("id").custom(
+export const validateUserFindByParamId = param("id").custom(
     async (value) => {
         const result = await usersQueryRepository.findUserByID(value);
         if (!result) {
@@ -210,14 +225,21 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
     if (!token){
         return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
     }
-    debugger
     const userId = await jwtService.getUserIdByToken(token);
     if (!userId){
         res.sendStatus(CodeResponsesEnum.Unauthorized_401);
     }
     req.userId = userId;
     next();
+}
 
+export const checkIsForbidden = async (req:Request, res:Response, next:NextFunction)=>{
+    const commentID = req.params.id
+    const currentComment = await  commentsQueryRepository.findCommentByID(commentID)
+    if (req.userId !== currentComment?.commentatorInfo.userId){
+        return res.sendStatus(CodeResponsesEnum.Forbidden_403);
+    }
+    next();
 }
 
 export const validateErrorsMiddleware = (

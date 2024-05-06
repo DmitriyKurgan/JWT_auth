@@ -2,7 +2,7 @@ import {commentsCollection, postsCollection} from "../repositories/db";
 import {ObjectId, WithId, InsertOneResult, UpdateResult, DeleteResult} from "mongodb";
 import {CommentType, OutputCommentType, OutputPostType, PostType} from "../utils/types";
 import {CommentMapper} from "./query-repositories/comments-query-repository";
-export const posts = [] as PostType[]
+export const comments = [] as PostType[]
 
 export const commentsRepository = {
    async createComment(newComment:CommentType, postID:string):Promise<OutputCommentType | null> {
@@ -11,6 +11,7 @@ export const commentsRepository = {
        return comment ? CommentMapper(comment, postID) : null
     },
    async updateComment(commentID:string, body:CommentType): Promise<boolean> {
+       debugger
         const result: UpdateResult<CommentType> = await commentsCollection.updateOne({_id: new ObjectId(commentID)},
             {$set: {
                     content: body.content,

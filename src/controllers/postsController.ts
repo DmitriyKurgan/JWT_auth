@@ -3,7 +3,7 @@ import {
     authMiddleware,
     validateAuthorization, validateBlogIdForPostsRequests,
     validateErrorsMiddleware,
-    validatePostsRequests, validationPostsCreation
+    validatePostsRequests, validationCommentsFindByParamId, validationPostsCreation
 } from "../middlewares/middlewares";
 import {CodeResponsesEnum, getQueryValues} from "../utils/utils";
 import {posts, postsService} from "../services/posts-service";
@@ -75,7 +75,6 @@ postsController.post('/', validateAuthorization, validatePostsRequests,validateB
 });
 
 postsController.post('/:id/comments', authMiddleware,async (req:Request, res:Response)=>{
-    debugger
     const post: OutputPostType | null = await postsQueryRepository.findPostByID(req.params.id)
     if (!post){
         return res.sendStatus(CodeResponsesEnum.Not_found_404);
@@ -97,7 +96,7 @@ postsController.post('/:id/comments', authMiddleware,async (req:Request, res:Res
 });
 
 
-postsController.put('/:id', validateAuthorization, validatePostsRequests,validateBlogIdForPostsRequests, validationPostsCreation, validateErrorsMiddleware, async (req:Request, res:Response)=>{
+postsController.put('/:id', validationCommentsFindByParamId, validateAuthorization, validatePostsRequests,validateBlogIdForPostsRequests, validationPostsCreation, validateErrorsMiddleware, async (req:Request, res:Response)=>{
     const postID = req.params.id;
     const isUpdated = await postsService.updatePost(postID, req.body);
 

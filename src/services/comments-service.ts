@@ -6,6 +6,7 @@ import {usersQueryRepository} from "../repositories/query-repositories/users-que
 import {PostMapper, postsRepository} from "../repositories/posts-repository";
 import {commentsRepository} from "../repositories/comments-repository";
 import {postsCollection} from "../repositories/db";
+import {body} from "express-validator";
 
 export const comments = [] as OutputCommentType[]
 
@@ -26,19 +27,8 @@ export const commentsService: any = {
     async deleteComment(commentID: string): Promise<boolean> {
         return await commentsRepository.deleteComment(commentID);
     },
-    async checkCredentials(loginOrEmail: string, password: string): Promise<boolean> {
-        const user: WithId<UserDBType> | null = await usersQueryRepository.findByLoginOrEmail(loginOrEmail);
-        if (!user) {
-            return false
-        }
-        const passwordHash = await this._generateHash(password, user.passwordSalt);
-
-        return user.passwordHash === passwordHash;
-
+    async updateComment(commentID: string, body: CommentType): Promise<boolean> {
+        return await commentsRepository.updateComment(commentID, body);
     },
-    async _generateHash(password: string, salt: string): Promise<string> {
-        const hash = await bcrypt.hash(password, salt);
-        return hash
-    }
 
 }

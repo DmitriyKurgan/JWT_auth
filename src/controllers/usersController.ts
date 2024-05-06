@@ -1,8 +1,8 @@
 import {Request, Response, Router} from "express";
 import {CodeResponsesEnum, getQueryValues} from "../utils/utils";
 import {
-    validateAuthorization, validateDeleteUserByParamId,
-    validateErrorsMiddleware, validateUsersRequests,
+    validateAuthorization,
+    validateErrorsMiddleware, validateUserFindByParamId, validateUsersRequests,
 } from "../middlewares/middlewares";
 import {users, usersService} from "../services/users-service";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
@@ -31,7 +31,7 @@ usersController.post('/', validateAuthorization, validateUsersRequests, validate
     }
 });
 
-usersController.delete('/:id', validateAuthorization, validateDeleteUserByParamId, validateErrorsMiddleware, async (req: Request, res: Response) => {
+usersController.delete('/:id', validateAuthorization, validateUserFindByParamId, validateErrorsMiddleware, async (req: Request, res: Response) => {
     const userID: string = req.params.id;
     const isDeleted: boolean = await usersService.deleteUser(userID);
     if (!isDeleted || !userID) {

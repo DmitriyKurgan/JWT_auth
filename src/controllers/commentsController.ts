@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
 import {CodeResponsesEnum, getQueryValues} from "../utils/utils";
 import {
+    authMiddleware,
     validateAuthorization, validateDeleteUserByParamId,
     validateErrorsMiddleware, validateUsersRequests, validationCommentsFindByParamId,
 } from "../middlewares/middlewares";
@@ -25,7 +26,7 @@ commentsController.get('/:id', async (req: Request, res: Response) => {
 })
 
 
-commentsController.put('/:id', validateAuthorization, validateErrorsMiddleware, async (req: Request, res: Response) => {
+commentsController.put('/:id', authMiddleware, validateErrorsMiddleware, async (req: Request, res: Response) => {
     const newComment: OutputCommentType | null = await commentsService.updateComment(req.params.id, req.body);
     if (newComment) {
         comments.push(newComment);
@@ -33,7 +34,7 @@ commentsController.put('/:id', validateAuthorization, validateErrorsMiddleware, 
     }
 });
 
-commentsController.delete('/:id', validateAuthorization, validateErrorsMiddleware, async (req: Request, res: Response) => {
+commentsController.delete('/:id', authMiddleware, validateErrorsMiddleware, async (req: Request, res: Response) => {
     const commentID: string = req.params.id;
     const isDeleted: boolean = await commentsService.deleteComment(commentID);
     if (!isDeleted || !commentID) {

@@ -83,11 +83,11 @@ postsController.post('/:id/comments', authMiddleware,async (req:Request, res:Res
     if (!req.userId){
         return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
     }
-    const user = await usersQueryRepository.findUserByID(req?.userId?.toString())
+    const user = await usersQueryRepository.findUserByID(req?.userId)
     if (!user){
         return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
     }
-    const newComment: OutputCommentType| null = await commentsService.createComment(req.body, post.id, req.userId.toString(), user.login);
+    const newComment: OutputCommentType| null = await commentsService.createComment(req.body, post.id, req.userId, user.login);
     if (!newComment) {
         return
     }

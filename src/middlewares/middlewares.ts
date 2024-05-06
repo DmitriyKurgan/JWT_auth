@@ -238,6 +238,9 @@ export const checkIsForbidden = async (req:Request, res:Response, next:NextFunct
     debugger
     const commentID = req.params.id
     const currentComment = await  commentsQueryRepository.findCommentByID(commentID)
+    if (!currentComment){
+        return res.sendStatus(CodeResponsesEnum.Not_found_404);
+    }
     if (req.userId !== currentComment?.commentatorInfo.userId){
         return res.sendStatus(CodeResponsesEnum.Forbidden_403);
     }

@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {
     authMiddleware,
-    validateAuthorization, validateBlogIdForPostsRequests,
+    validateAuthorization, validateBlogIdForPostsRequests, validateCommentsRequests,
     validateErrorsMiddleware,
     validatePostsRequests, validationCommentsFindByParamId, validationPostsCreation
 } from "../middlewares/middlewares";
@@ -80,7 +80,11 @@ postsController.post('/',
     res.status(CodeResponsesEnum.Created_201).send(newPost);
 });
 
-postsController.post('/:id/comments', authMiddleware,async (req:Request, res:Response)=>{
+postsController.post('/:id/comments',
+    authMiddleware,
+    validateCommentsRequests,
+    validateErrorsMiddleware,
+    async (req:Request, res:Response)=>{
     const post: OutputPostType | null = await postsQueryRepository.findPostByID(req.params.id)
     if (!post){
         return res.sendStatus(CodeResponsesEnum.Not_found_404);

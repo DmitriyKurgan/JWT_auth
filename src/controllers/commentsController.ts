@@ -26,8 +26,8 @@ commentsController.get('/:id',
 
 
 commentsController.put('/:id',
-    authMiddleware,
     validationCommentsFindByParamId,
+    authMiddleware,
     checkIsForbidden,
     validateCommentsRequests,
     validateErrorsMiddleware,
@@ -41,8 +41,8 @@ commentsController.put('/:id',
 });
 
 commentsController.delete('/:id',
-    authMiddleware,
     validationCommentsFindByParamId,
+    authMiddleware,
     checkIsForbidden,
     validateErrorsMiddleware,
     async (req: Request, res: Response) => {

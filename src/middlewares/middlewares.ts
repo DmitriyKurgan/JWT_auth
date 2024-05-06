@@ -218,7 +218,6 @@ export const validateAuthorization = (req: Request, res: Response, next: NextFun
 };
 
 export const authMiddleware = async (req:Request, res:Response, next:NextFunction)=>{
-    debugger
     if (!req?.headers?.authorization){
        return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
     }
@@ -235,7 +234,6 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
 }
 
 export const checkIsForbidden = async (req:Request, res:Response, next:NextFunction)=>{
-    debugger
     const commentID = req.params.id
     const currentComment = await  commentsQueryRepository.findCommentByID(commentID)
     if (req.userId !== currentComment?.commentatorInfo.userId){

@@ -1,13 +1,15 @@
 
 import {PostMapper} from "../repositories/query-repositories/posts-query-repository";
 import {BLogMapper} from "../repositories/query-repositories/blogs-query-repository";
-import {BLogType, PostType, UserType} from "./types";
+import {BLogType, CommentType, PostType, UserType} from "./types";
 import {WithId} from "mongodb";
-import {blogsCollection, postsCollection, usersCollection} from "../repositories/db";
+import {blogsCollection, commentsCollection, postsCollection, usersCollection} from "../repositories/db";
 import {UserMapper} from "../repositories/query-repositories/users-query-repository";
+import {CommentMapper} from "../repositories/query-repositories/comments-query-repository";
 
 export enum CodeResponsesEnum {
     Incorrect_values_400 = 400,
+    Unauthorized_401= 401,
     Not_found_404 = 404,
     Not_content_204 = 204,
     Created_201 = 201,
@@ -74,6 +76,40 @@ export const getPostsFromDB = async (query:any, blogID?:string) => {
         return { error: 'some error' };
     }
 }
+
+export const getCommentsFromDB = async (query:any, postID?:string) => {
+    debugger
+    const byId = postID ? {  postId: postID } : {};
+    const search = query.searchNameTerm
+        ? { title: { $regex: query.searchNameTerm, $options: 'i' } }
+        : {};
+    const filter = {
+        ...byId,
+        ...search,
+    };
+
+    try {
+        const items = await commentsCollection
+            .find(filter)
+            .sort({ [query.sortBy]: query.sortDirection === 'asc' ? 1 : -1 })
+            .skip((query.pageNumber - 1) * query.pageSize)
+            .limit(query.pageSize)
+            .toArray();
+
+        const totalCount = await commentsCollection.countDocuments(filter);
+        return {
+            pagesCount: Math.ceil(totalCount / query.pageSize),
+            page: query.pageNumber,
+            pageSize: query.pageSize,
+            totalCount,
+            items: items.map((comment:WithId<CommentType>) => CommentMapper(comment)),
+        };
+    } catch (e) {
+        console.log(e);
+        return { error: 'some error' };
+    }
+}
+
 
 export const getBlogsFromDB = async (query:any) => {
     const search = query.searchNameTerm

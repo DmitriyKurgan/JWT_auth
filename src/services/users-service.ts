@@ -26,15 +26,16 @@ export const usersService:any = {
    async deleteUser(userID:string): Promise<boolean>{
        return await usersRepository.deleteUser(userID);
     },
-    async checkCredentials(loginOrEmail:string, password:string):Promise<boolean>{
+    async checkCredentials(loginOrEmail:string, password:string):Promise<WithId<UserDBType> | null>{
         const user:WithId<UserDBType> | null = await usersQueryRepository.findByLoginOrEmail(loginOrEmail);
         if (!user){
-            return false
+            return null
         }
         const passwordHash = await this._generateHash(password, user.passwordSalt);
-
-        return user.passwordHash === passwordHash;
-
+        if (user.passwordHash !== passwordHash){
+            return null
+        }
+        return user
     },
     async _generateHash(password:string, salt:string):Promise<string>{
         const hash = await bcrypt.hash(password, salt);

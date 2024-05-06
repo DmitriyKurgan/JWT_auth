@@ -1,14 +1,18 @@
 import {Request, Response, Router} from "express";
 import {
+    authMiddleware,
     validateAuthorization, validateBlogIdForPostsRequests,
     validateErrorsMiddleware,
     validatePostsRequests, validationPostsCreation
 } from "../middlewares/middlewares";
 import {CodeResponsesEnum, getQueryValues} from "../utils/utils";
 import {posts, postsService} from "../services/posts-service";
-import {OutputBlogType, OutputPostType} from "../utils/types";
+import {OutputBlogType, OutputCommentType, OutputPostType} from "../utils/types";
 import {postsQueryRepository} from "../repositories/query-repositories/posts-query-repository";
 import {blogsQueryRepository} from "../repositories/query-repositories/blogs-query-repository";
+import {commentsQueryRepository} from "../repositories/query-repositories/comments-query-repository";
+import {comments, commentsService} from "../services/comments-service";
+import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
 
 export const postsController = Router({});
 
@@ -36,6 +40,26 @@ postsController.get('/:id', async (req:Request, res:Response)=>{
     res.status(CodeResponsesEnum.OK_200).send(postByID);
 });
 
+postsController.get('/:id/comments', async (req:Request, res:Response)=>{
+    const queryValues = getQueryValues({
+        pageNumber: req.query.pageNumber,
+        pageSize: req.query.pageSize,
+        sortBy: req.query.sortBy,
+        sortDirection: req.query.sortDirection,
+    })
+    const postID:string = req.params.id;
+    const postByID:OutputPostType|null = await postsQueryRepository.findPostByID(postID);
+    if (!postID || !postByID){
+        return res.sendStatus(CodeResponsesEnum.Not_found_404)
+    }
+    const commentsForParticularPost = await commentsQueryRepository.findAllCommentsByPostID(postID, queryValues)
+
+    if (!commentsForParticularPost) {
+        return res.status(CodeResponsesEnum.OK_200).send([]);
+    }
+    res.status(CodeResponsesEnum.OK_200).send(commentsForParticularPost);
+});
+
 postsController.post('/', validateAuthorization, validatePostsRequests,validateBlogIdForPostsRequests, validationPostsCreation, validateErrorsMiddleware, async (req:Request, res:Response)=>{
     const blog: OutputBlogType | null = await blogsQueryRepository.findBlogByID(req.body.blogId)
     if (!blog){
@@ -48,6 +72,29 @@ postsController.post('/', validateAuthorization, validatePostsRequests,validateB
     posts.push(newPost);
     res.status(CodeResponsesEnum.Created_201).send(newPost);
 });
+
+postsController.post('/:id/comments', authMiddleware,async (req:Request, res:Response)=>{
+    debugger
+    const post: OutputPostType | null = await postsQueryRepository.findPostByID(req.params.id)
+    if (!post){
+        return res.sendStatus(CodeResponsesEnum.Not_found_404);
+    }
+    if (!req.userId){
+        return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
+    }
+    const user = await usersQueryRepository.findUserByID(req?.userId?.toString())
+    if (!user){
+        return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
+    }
+    const newComment: OutputCommentType| null = await commentsService.createComment(req.body, post.id, req.userId.toString(), user.login);
+    if (!newComment) {
+        return
+    }
+    comments.push(newComment);
+    debugger
+    res.status(CodeResponsesEnum.Created_201).send(newComment);
+});
+
 
 postsController.put('/:id', validateAuthorization, validatePostsRequests,validateBlogIdForPostsRequests, validationPostsCreation, validateErrorsMiddleware, async (req:Request, res:Response)=>{
     const postID = req.params.id;

@@ -38,6 +38,22 @@ export type UserDBType = {
 
 export type OutputUserType = UserType & {id:string}
 
+export type CommentType = {
+    content:string
+    commentatorInfo:{
+        userId: string,
+        userLogin: string
+    }
+    createdAt:string
+}
+
+export type CommentatorType = {
+    userId: string,
+    userLogin: string
+}
+
+export type OutputCommentType = CommentType & {id:string}
+
 export type BlogsServiceType = {
     createBlog(body: BLogType): Promise<OutputBlogType | null>
     updateBlog(blogID: string, body: BLogType): Promise<boolean>
@@ -48,4 +64,8 @@ export type PostsServiceType = {
     createPost(body: PostType, blogName: string, blogID: string):Promise<OutputPostType | null>
     updatePost(postID: string, body: PostType): Promise<boolean>
     deletePost(postID: string): Promise<boolean>
+}
+
+export type AccessTokenType = {
+    accessToken:string
 }

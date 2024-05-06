@@ -104,6 +104,9 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
-  }
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+  },
+  "include": ["src/**/*.ts"], // Включаем только файлы TypeScript из папки src и её подпапок
+  "exclude": ["node_modules"], // Исключаем папку node_modules из компиляции
+  "files": ["index.d.ts"]
 }

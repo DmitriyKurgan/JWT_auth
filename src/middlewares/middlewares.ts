@@ -4,6 +4,9 @@ import {blogsRepository} from "../repositories/blogs-repository";
 import {usersRepository} from "../repositories/users-repository";
 import {blogsQueryRepository} from "../repositories/query-repositories/blogs-query-repository";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
+import {commentsQueryRepository} from "../repositories/query-repositories/comments-query-repository";
+import {CodeResponsesEnum} from "../utils/utils";
+import {jwtService} from "../application/jwt-service";
 const websiteUrlPattern =
     /^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/;
 const loginPattern =
@@ -167,6 +170,18 @@ export const validationBlogsFindByParamId = param("id").custom(
     }
 );
 
+
+export const validationCommentsFindByParamId = param("id").custom(
+    async (value) => {
+        // debugger
+        const result = await commentsQueryRepository.findCommentByID(value);
+        if (!result) {
+            throw new Error("ID not found");
+        }
+        return true;
+    }
+);
+
 export const validateDeleteUserByParamId = param("id").custom(
     async (value) => {
         const result = await usersQueryRepository.findUserByID(value);
@@ -185,6 +200,25 @@ export const validateAuthorization = (req: Request, res: Response, next: NextFun
         next();
     }
 };
+
+export const authMiddleware = async (req:Request, res:Response, next:NextFunction)=>{
+    debugger
+    if (!req?.headers?.authorization){
+       return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
+    }
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token){
+        return res.sendStatus(CodeResponsesEnum.Unauthorized_401);
+    }
+    debugger
+    const userId = await jwtService.getUserIdByToken(token);
+    if (!userId){
+        res.sendStatus(CodeResponsesEnum.Unauthorized_401);
+    }
+    req.userId = userId;
+    next();
+
+}
 
 export const validateErrorsMiddleware = (
     req: Request,

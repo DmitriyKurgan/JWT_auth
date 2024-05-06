@@ -5,6 +5,7 @@ import {testingController} from "./controllers/testingController";
 import {postsController} from "./controllers/postsController";
 import {usersController} from "./controllers/usersController";
 import {authController} from "./controllers/authController";
+import {commentsController} from "./controllers/commentsController";
 
 
 export const app = express();
@@ -20,4 +21,5 @@ app.use('/blogs', blogsController);
 app.use('/posts', postsController);
 app.use('/users', usersController);
 app.use('/auth', authController);
+app.use('/comments', commentsController);
 app.use('/testing/all-data', testingController);

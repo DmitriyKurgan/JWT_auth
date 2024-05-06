@@ -12,7 +12,7 @@ import {commentsQueryRepository} from "../repositories/query-repositories/commen
 
 export const commentsController = Router({});
 
-commentsController.get('/:id', validationCommentsFindByParamId, validateErrorsMiddleware, async (req: Request, res: Response) => {
+commentsController.get('/:id', async (req: Request, res: Response) => {
     debugger
     const commentID = req.params.id;
     const commentByID:OutputCommentType|null = await commentsQueryRepository.findCommentByID(commentID);
@@ -23,14 +23,14 @@ commentsController.get('/:id', validationCommentsFindByParamId, validateErrorsMi
 })
 
 
-// commentsController.put('/', validateAuthorization, validateUsersRequests, validateErrorsMiddleware, async (req: Request, res: Response) => {
-//     const newUser: OutputUserType | null = await usersService.createUser(req.body.login, req.body.email, req.body.password);
-//     if (newUser) {
-//         users.push(newUser);
-//         res.status(CodeResponsesEnum.Created_201).send(newUser);
-//     }
-// });
-//
+commentsController.put('/', validateAuthorization, validateUsersRequests, validateErrorsMiddleware, async (req: Request, res: Response) => {
+    const newUser: OutputUserType | null = await usersService.createUser(req.body.login, req.body.email, req.body.password);
+    if (newUser) {
+        users.push(newUser);
+        res.status(CodeResponsesEnum.Created_201).send(newUser);
+    }
+});
+
 // commentsController.delete('/:id', validateAuthorization, validateDeleteUserByParamId, validateErrorsMiddleware, async (req: Request, res: Response) => {
 //     const userID: string = req.params.id;
 //     const isDeleted: boolean = await usersService.deleteUser(userID);

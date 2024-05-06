@@ -53,7 +53,6 @@ postsController.get('/:id/comments', async (req:Request, res:Response)=>{
         return res.sendStatus(CodeResponsesEnum.Not_found_404)
     }
     const commentsForParticularPost = await commentsQueryRepository.findAllCommentsByPostID(postID, queryValues)
-
     if (!commentsForParticularPost) {
         return res.status(CodeResponsesEnum.OK_200).send([]);
     }

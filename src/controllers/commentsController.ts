@@ -28,8 +28,8 @@ commentsController.get('/:id',
 
 commentsController.put('/:id',
     authMiddleware,
-    checkIsForbidden,
     validationCommentsFindByParamId,
+    checkIsForbidden,
     validateCommentsRequests,
     validateErrorsMiddleware,
     async (req: Request, res: Response) => {
@@ -44,8 +44,8 @@ commentsController.put('/:id',
 
 commentsController.delete('/:id',
     authMiddleware,
-    checkIsForbidden,
     validationCommentsFindByParamId,
+    checkIsForbidden,
     validateErrorsMiddleware,
     async (req: Request, res: Response) => {
     const commentID: string = req.params.id;

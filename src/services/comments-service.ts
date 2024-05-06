@@ -12,6 +12,7 @@ export const comments = [] as OutputCommentType[]
 export const commentsService: any = {
     async createComment(body: CommentType, postID: string, userID:string, userLogin:string): Promise<OutputCommentType | null> {
         const newComment: CommentType = {
+            postId:postID,
             content: body.content,
             commentatorInfo: {
                 userId: userID,

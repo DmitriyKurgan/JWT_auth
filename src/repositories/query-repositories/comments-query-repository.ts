@@ -5,7 +5,7 @@ import {commentsCollection, usersCollection} from "../db";
 
 export const CommentMapper = (comment : WithId<CommentType>,postID?:string) : OutputCommentType => {
     return {
-        id: postID ?? comment._id.toString(),
+        id: comment._id.toString(),
         content: comment.content,
         commentatorInfo:{
             userId: comment.commentatorInfo.userId,

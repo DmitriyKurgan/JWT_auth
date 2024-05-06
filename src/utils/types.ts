@@ -39,6 +39,7 @@ export type UserDBType = {
 export type OutputUserType = UserType & {id:string}
 
 export type CommentType = {
+    postId?:string
     content:string
     commentatorInfo:{
         userId: string,

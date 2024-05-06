@@ -9,7 +9,6 @@ export const commentsRepository = {
        const result:InsertOneResult<CommentType> = await commentsCollection.insertOne(newComment)
        const comment:WithId<CommentType> | null = await commentsCollection.findOne({_id:result.insertedId})
        return comment ? CommentMapper(comment, postID) : null
-
     },
    async updatePost(postID:string, body:PostType): Promise<boolean> {
         const result: UpdateResult<PostType> = await postsCollection.updateOne({_id: new ObjectId(postID)},

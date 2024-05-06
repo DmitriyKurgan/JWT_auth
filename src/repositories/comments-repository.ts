@@ -10,19 +10,19 @@ export const commentsRepository = {
        const comment:WithId<CommentType> | null = await commentsCollection.findOne({_id:result.insertedId})
        return comment ? CommentMapper(comment, postID) : null
     },
-   async updatePost(postID:string, body:PostType): Promise<boolean> {
-        const result: UpdateResult<PostType> = await postsCollection.updateOne({_id: new ObjectId(postID)},
+   async updateComment(commentID:string, body:CommentType): Promise<boolean> {
+        const result: UpdateResult<CommentType> = await commentsCollection.updateOne({_id: new ObjectId(commentID)},
             {$set: {
-                    title: body.title,
-                    shortDescription: body.shortDescription,
                     content: body.content,
-                    blogId: body.blogId
+                    commentatorInfo: {...body.commentatorInfo},
+                    createdAt:body.createdAt,
+                    postId:body.postId
                 }});
        return result.matchedCount === 1
     },
-   async deletePost(postID:string){
+   async deleteComment(commentID:string){
 
-        const result: DeleteResult = await postsCollection.deleteOne({_id: new ObjectId(postID)})
+        const result: DeleteResult = await commentsCollection.deleteOne({_id: new ObjectId(commentID)})
 
        return result.deletedCount === 1
     }

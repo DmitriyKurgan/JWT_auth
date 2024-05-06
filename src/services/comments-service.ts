@@ -23,8 +23,8 @@ export const commentsService: any = {
         const createdComment: OutputCommentType | null = await commentsRepository.createComment(newComment, postID);
         return createdComment
     },
-    async deleteUser(userID: string): Promise<boolean> {
-        return await usersRepository.deleteUser(userID);
+    async deleteComment(commentID: string): Promise<boolean> {
+        return await commentsRepository.deleteComment(commentID);
     },
     async checkCredentials(loginOrEmail: string, password: string): Promise<boolean> {
         const user: WithId<UserDBType> | null = await usersQueryRepository.findByLoginOrEmail(loginOrEmail);

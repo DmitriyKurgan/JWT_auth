@@ -9,6 +9,8 @@ import {usersQueryRepository} from "../repositories/query-repositories/users-que
 import {OutputBlogType, OutputCommentType, OutputUserType} from "../utils/types";
 import {blogsQueryRepository} from "../repositories/query-repositories/blogs-query-repository";
 import {commentsQueryRepository} from "../repositories/query-repositories/comments-query-repository";
+import {comments, commentsService} from "../services/comments-service";
+import {body} from "express-validator";
 
 export const commentsController = Router({});
 
@@ -23,21 +25,21 @@ commentsController.get('/:id', async (req: Request, res: Response) => {
 })
 
 
-commentsController.put('/', validateAuthorization, validateUsersRequests, validateErrorsMiddleware, async (req: Request, res: Response) => {
-    const newUser: OutputUserType | null = await usersService.createUser(req.body.login, req.body.email, req.body.password);
-    if (newUser) {
-        users.push(newUser);
-        res.status(CodeResponsesEnum.Created_201).send(newUser);
+commentsController.put('/:id', validateAuthorization, validateErrorsMiddleware, async (req: Request, res: Response) => {
+    const newComment: OutputCommentType | null = await commentsService.updateComment(req.params.id, req.body);
+    if (newComment) {
+        comments.push(newComment);
+        res.status(CodeResponsesEnum.Created_201).send(newComment);
     }
 });
 
-// commentsController.delete('/:id', validateAuthorization, validateDeleteUserByParamId, validateErrorsMiddleware, async (req: Request, res: Response) => {
-//     const userID: string = req.params.id;
-//     const isDeleted: boolean = await usersService.deleteUser(userID);
-//     if (!isDeleted || !userID) {
-//         return res.sendStatus(CodeResponsesEnum.Not_found_404);
-//     }
-//     res.sendStatus(CodeResponsesEnum.Not_content_204);
-// })
+commentsController.delete('/:id', validateAuthorization, validateErrorsMiddleware, async (req: Request, res: Response) => {
+    const commentID: string = req.params.id;
+    const isDeleted: boolean = await commentsService.deleteComment(commentID);
+    if (!isDeleted || !commentID) {
+        return res.sendStatus(CodeResponsesEnum.Not_found_404);
+    }
+    res.sendStatus(CodeResponsesEnum.Not_content_204);
+})
 
 

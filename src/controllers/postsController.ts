@@ -61,7 +61,13 @@ postsController.get('/:id/comments', async (req:Request, res:Response)=>{
     res.status(CodeResponsesEnum.OK_200).send(commentsForParticularPost);
 });
 
-postsController.post('/', validateAuthorization, validatePostsRequests,validateBlogIdForPostsRequests, validationPostsCreation, validateErrorsMiddleware, async (req:Request, res:Response)=>{
+postsController.post('/',
+    validateAuthorization,
+    validatePostsRequests,
+    validateBlogIdForPostsRequests,
+    validationPostsCreation,
+    validateErrorsMiddleware,
+    async (req:Request, res:Response)=>{
     const blog: OutputBlogType | null = await blogsQueryRepository.findBlogByID(req.body.blogId)
     if (!blog){
         return res.sendStatus(CodeResponsesEnum.Not_found_404);
@@ -91,12 +97,17 @@ postsController.post('/:id/comments', authMiddleware,async (req:Request, res:Res
         return
     }
     comments.push(newComment);
-    debugger
     res.status(CodeResponsesEnum.Created_201).send(newComment);
 });
 
 
-postsController.put('/:id', validationCommentsFindByParamId, validateAuthorization, validatePostsRequests,validateBlogIdForPostsRequests, validationPostsCreation, validateErrorsMiddleware, async (req:Request, res:Response)=>{
+postsController.put('/:id',
+    validateAuthorization,
+    validatePostsRequests,
+    validateBlogIdForPostsRequests,
+    validationPostsCreation,
+    validateErrorsMiddleware,
+    async (req:Request, res:Response)=>{
     const postID = req.params.id;
     const isUpdated = await postsService.updatePost(postID, req.body);
 

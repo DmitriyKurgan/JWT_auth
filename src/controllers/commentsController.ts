@@ -46,7 +46,6 @@ commentsController.delete('/:id',
     authMiddleware,
     checkIsForbidden,
     validationCommentsFindByParamId,
-    validateCommentsRequests,
     validateErrorsMiddleware,
     async (req: Request, res: Response) => {
     const commentID: string = req.params.id;

@@ -202,7 +202,7 @@ export const validateUserFindByParamId = param("id").custom(
     async (value) => {
         const result = await usersQueryRepository.findUserByID(value);
         if (!result) {
-            return CodeResponsesEnum.Not_found_404
+            throw new Error("ID not found");
         }
         return true;
     }

@@ -5,10 +5,10 @@ import {CommentMapper} from "./query-repositories/comments-query-repository";
 export const comments = [] as PostType[]
 
 export const commentsRepository = {
-   async createComment(newComment:CommentType, postID:string):Promise<OutputCommentType | null> {
+   async createComment(newComment:CommentType):Promise<OutputCommentType | null> {
        const result:InsertOneResult<CommentType> = await commentsCollection.insertOne(newComment)
        const comment:WithId<CommentType> | null = await commentsCollection.findOne({_id:result.insertedId})
-       return comment ? CommentMapper(comment, postID) : null
+       return comment ? CommentMapper(comment) : null
     },
    async updateComment(commentID:string, body:CommentType): Promise<boolean> {
         const result: UpdateResult<CommentType> = await commentsCollection

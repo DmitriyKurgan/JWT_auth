@@ -1,9 +1,9 @@
-import {CommentType, OutputCommentType, OutputUserType, UserDBType, UserType} from "../../utils/types";
+import {CommentType, OutputCommentType} from "../../utils/types";
 import {ObjectId, WithId} from "mongodb";
-import {getCommentsFromDB, getPostsFromDB, getUsersFromDB} from "../../utils/utils";
-import {commentsCollection, usersCollection} from "../db";
+import {getCommentsFromDB} from "../../utils/utils";
+import {commentsCollection} from "../db";
 
-export const CommentMapper = (comment : WithId<CommentType>,postID?:string) : OutputCommentType => {
+export const CommentMapper = (comment : WithId<CommentType>) : OutputCommentType => {
     return {
         id: comment._id.toString(),
         content: comment.content,
@@ -16,13 +16,6 @@ export const CommentMapper = (comment : WithId<CommentType>,postID?:string) : Ou
 }
 
 export const commentsQueryRepository = {
-    async getAllUsers(query: any): Promise<any | { error: string }> {
-        return getUsersFromDB(query);
-    },
-    async findByLoginOrEmail(loginOrEmail:string){
-        const user = await usersCollection.findOne({$or: [{login:loginOrEmail}, {email:loginOrEmail}]})
-        return user
-},
     async findAllCommentsByPostID(postID: string, query:any):Promise<any | { error: string }> {
         return getCommentsFromDB(query, postID)
     },

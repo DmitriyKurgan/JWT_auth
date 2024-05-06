@@ -14,7 +14,7 @@ export const commentsService: any = {
             },
             createdAt: new Date().toISOString()
         }
-        const createdComment: OutputCommentType | null = await commentsRepository.createComment(newComment, postID);
+        const createdComment: OutputCommentType | null = await commentsRepository.createComment(newComment);
         return createdComment
     },
     async deleteComment(commentID: string): Promise<boolean> {

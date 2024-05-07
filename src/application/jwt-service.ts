@@ -1,11 +1,7 @@
-import {AccessTokenType, OutputUserType, UserDBType} from "../utils/types";
-import {usersRepository} from "../repositories/users-repository";
-import bcrypt from 'bcrypt'
-import {ObjectId, WithId} from "mongodb";
-import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
+import {AccessTokenType, UserDBType} from "../utils/types";
+import {ObjectId} from "mongodb";
 import jwt from 'jsonwebtoken';
 import {settings} from "../settings";
-export const users = [] as OutputUserType[]
 
 export const jwtService:any = {
 

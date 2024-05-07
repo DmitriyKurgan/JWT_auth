@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 import {CodeResponsesEnum} from "../utils/utils";
 import {
-    authMiddleware, checkIsForbidden,
+    authMiddleware,
     validateCommentsRequests,
     validateErrorsMiddleware, validationCommentOwner,
     validationCommentsFindByParamId,

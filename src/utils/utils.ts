@@ -79,7 +79,6 @@ export const getPostsFromDB = async (query:any, blogID?:string) => {
 }
 
 export const getCommentsFromDB = async (query:any, postID?:string) => {
-    debugger
     const byId = postID ? {  postId: postID } : {};
     const search = query.searchNameTerm
         ? { title: { $regex: query.searchNameTerm, $options: 'i' } }

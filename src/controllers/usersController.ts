@@ -6,7 +6,7 @@ import {
 } from "../middlewares/middlewares";
 import {users, usersService} from "../services/users-service";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
-import {OutputUserType, UserDBType, UserType} from "../utils/types";
+import {OutputUserType} from "../utils/types";
 
 export const usersController = Router({});
 

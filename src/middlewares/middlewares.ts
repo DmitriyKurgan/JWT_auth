@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import {body, param, ValidationError, validationResult} from 'express-validator';
-import {blogsRepository} from "../repositories/blogs-repository";
-import {usersRepository} from "../repositories/users-repository";
 import {blogsQueryRepository} from "../repositories/query-repositories/blogs-query-repository";
 import {usersQueryRepository} from "../repositories/query-repositories/users-query-repository";
 import {commentsQueryRepository} from "../repositories/query-repositories/comments-query-repository";
@@ -189,7 +187,6 @@ export const validationBlogsFindByParamId = param("id").custom(
 
 export const validationCommentsFindByParamId = param("id").custom(
     async (value) => {
-        debugger
         const result = await commentsQueryRepository.findCommentByID(value);
         if (!result) {
             throw new Error("ID not found");
@@ -232,16 +229,6 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
     req.userId = userId;
     next();
 }
-
-export const checkIsForbidden = async (req:Request, res:Response, next:NextFunction)=>{
-    const commentID = req.params.id
-    const currentComment = await  commentsQueryRepository.findCommentByID(commentID)
-    if (req.userId !== currentComment?.commentatorInfo.userId){
-        return res.sendStatus(CodeResponsesEnum.Forbidden_403);
-    }
-    next();
-}
-
 
 export const validationCommentOwner = async (
     req: Request,

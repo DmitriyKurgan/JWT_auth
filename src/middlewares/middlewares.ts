@@ -242,6 +242,20 @@ export const checkIsForbidden = async (req:Request, res:Response, next:NextFunct
     next();
 }
 
+
+export const validationCommentOwner = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const foundComment = await commentsQueryRepository
+        .findCommentByID(req.params.id);
+    if (!foundComment || foundComment.commentatorInfo.userId !== req.userId) {
+      return res.sendStatus(CodeResponsesEnum.Forbidden_403);
+    }
+    next();
+};
+
 export const validateErrorsMiddleware = (
     req: Request,
     res: Response,

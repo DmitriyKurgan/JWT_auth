@@ -3,7 +3,7 @@ import {CodeResponsesEnum} from "../utils/utils";
 import {
     authMiddleware, checkIsForbidden,
     validateCommentsRequests,
-    validateErrorsMiddleware,
+    validateErrorsMiddleware, validationCommentOwner,
     validationCommentsFindByParamId,
 } from "../middlewares/middlewares";
 import {OutputCommentType} from "../utils/types";
@@ -28,9 +28,9 @@ commentsController.get('/:id',
 commentsController.put('/:id',
     validationCommentsFindByParamId,
     authMiddleware,
-  //  checkIsForbidden,
     validateCommentsRequests,
     validateErrorsMiddleware,
+    validationCommentOwner,
     async (req: Request, res: Response) => {
     const commentID = req.params.id;
     const isUpdated: boolean = await commentsService.updateComment(commentID, req.body);
@@ -43,8 +43,8 @@ commentsController.put('/:id',
 commentsController.delete('/:id',
     validationCommentsFindByParamId,
     authMiddleware,
-  //  checkIsForbidden,
     validateErrorsMiddleware,
+    validationCommentOwner,
     async (req: Request, res: Response) => {
     const commentID: string = req.params.id;
     const isDeleted: boolean = await commentsService.deleteComment(commentID);
